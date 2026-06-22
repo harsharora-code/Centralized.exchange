@@ -38,5 +38,10 @@ while(1) {
 
   const filledQty = parseResponse.filledQty;
   const identifier = parseResponse.identifier;
-  publisherClient.lPush("response-queue", JSON.stringify({filledQty, identifier}));
+  console.log("pushing into response-queue",  {
+    filledQty,
+    identifier
+  })
+  const result = await publisherClient.lPush("response-queue", JSON.stringify({filledQty, identifier}));
+  console.log("pushed, queue size = ", result);
 }
