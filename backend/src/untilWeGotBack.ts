@@ -6,7 +6,7 @@ let pendingResolve: Record<number, resolveFn> = {};
 async function poller() {
  const response = await (await suscriber).brPop("response-queue", 5);
  if(!response) {
-    console.log(response);
+    console.log("poller got: ", response);
     poller();
  } else {
     const parseResponse =  JSON.parse(response.element);
