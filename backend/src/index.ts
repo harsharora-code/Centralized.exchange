@@ -23,7 +23,7 @@ app.post("/orders", async (req, res) => {
     console.log("after-push");
 
     const returnData = await untilWeGotBack(identifier);
-    console.log("got response");
+    console.log("got returned: ", returnData);
     res.json({
         message: "order-placed", filledQty: returnData.filledQty
     });
