@@ -36,12 +36,13 @@ while(1) {
 
     }
 
-  const filledQty = parseResponse.filledQty;
+  const filledQty = parseResponse.marketPrice;
   const identifier = parseResponse.identifier;
   console.log("pushing into response-queue",  {
     filledQty,
     identifier
   })
-  const result = await publisherClient.lPush("response-queue", JSON.stringify({filledQty, identifier}));
+  console.log("publishing to" + "response-queue - " + parseResponse.queue_id);
+  const result = await publisherClient.lPush("response-queue" + parseResponse.queue_id, JSON.stringify({filledQty, identifier}));
   console.log("pushed, queue size = ", result);
 }

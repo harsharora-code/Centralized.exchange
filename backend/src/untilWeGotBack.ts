@@ -1,11 +1,16 @@
 import { createClient } from "redis";
 const suscriber = createClient().on("error", (err) => console.log("Redis client error", err)).connect();
+export const queue_id = Math.random();
 
 type resolveFn = (value: {filledQty: number}) => void;
+
 let pendingResolve: Record<number, resolveFn> = {};
+
 console.log("poller-started");
+
 async function poller() {
- const response = await (await suscriber).brPop("response-queue", 5);
+  console.log("Subscribing to" + "response-queue - " +  queue_id);
+ const response = await (await suscriber).brPop("response-queue" + queue_id, 5);
    console.log("RAW RESPONSE =", response);
  if(!response) {
     console.log("poller got: ", response);

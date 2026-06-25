@@ -1,6 +1,8 @@
 import {createClient} from "redis";
 import express from "express";
-import {untilWeGotBack} from "./untilWeGotBack.js"
+import {untilWeGotBack, queue_id} from "./untilWeGotBack.js"
+
+
 
 const client = await createClient()
 .on("error", (err) => console.log("Redis-client error", err))
@@ -18,7 +20,7 @@ app.post("/orders", async (req, res) => {
     const {type, marketPrice, market_id, filledQty, side} = req.body;
     console.log("before push");
     await client.lPush("incoming-order", JSON.stringify({
-        type, marketPrice, market_id, filledQty, side, identifier  
+        type, marketPrice, market_id, filledQty, side, identifier, queue_id: queue_id  
     }))
     console.log("after-push");
 
