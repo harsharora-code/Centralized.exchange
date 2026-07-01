@@ -19,16 +19,18 @@ app.post("/orders", async (req, res) => {
     let identifier = Math.random();
     const {type, marketPrice, market_id, filledQty, side} = req.body;
     console.log("before push");
+    const pendingResponse = untilWeGotBack(identifier);  //register it before
     await client.lPush("incoming-order", JSON.stringify({
         type, marketPrice, market_id, filledQty, side, identifier, queue_id: queue_id  
     }))
     console.log("after-push");
 
-    const returnData = await untilWeGotBack(identifier);
+    const returnData = await pendingResponse;
+    
     console.log("got returned: ", returnData);
     res.json({
         message: "order-placed", filledQty: returnData.filledQty
     });
 
 })
-app.listen(3000);
+app.listen(3001);
